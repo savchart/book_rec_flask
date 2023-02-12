@@ -7,8 +7,12 @@ WORKDIR /app
 # Copy the local files to the container
 COPY . .
 
+#install wget and unzip and delete the apt cache
+RUN apt-get update && apt-get install -y wget unzip git && rm -rf /var/lib/apt/lists/*
+
 # Install the required packages
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -e .
 
 # Run the shell script to download the data
 RUN chmod +x download_data.sh && \
@@ -18,10 +22,10 @@ RUN chmod +x download_data.sh && \
 RUN ls data | grep -E "BX-Book-Ratings.csv|BX-Books.csv"
 
 # Run the create_dataframe script
-RUN python create_db.py
+RUN python scripts/create_db.py
 
 # Check if the df file is present in the data folder
-RUN ls data | grep "df.csv"
+RUN ls data | grep "app.db"
 
-# Run the main script
-CMD ["python", "app.py"]
+#run uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
