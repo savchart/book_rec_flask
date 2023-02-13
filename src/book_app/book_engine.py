@@ -12,8 +12,8 @@ class BookProcessor:
         self.book_info = pd.DataFrame({"book_title": self.book_ratings.index, "mean_rating": self.book_ratings.values})
         self.book_info["num_ratings"] = self.df["book_title"].value_counts()[self.book_info["book_title"]].values
 
-        # Compute the correlation matrix for the mean ratings of all books
-        self.corr_matrix = pd.pivot_table(self.df, values="book_rating", index="user_id", columns="book_title",
+        # Compute the correlation matrix for the mean ratings of all books take ~10% of the data
+        self.corr_matrix = pd.pivot_table(self.df[:5000], values="book_rating", index="user_id", columns="book_title",
                                           fill_value=0).corr(method="pearson", min_periods=10)
 
     def get_result(self, top_books):
@@ -29,25 +29,7 @@ class BookProcessor:
         top_10 = self.corr_matrix[book_title].sort_values(ascending=False).iloc[1:11]
         return self.get_result(top_10)
 
-    def book_recommendation(self, user_id):
-        user_ratings = self.corr_matrix.loc[user_id, :]
 
-        # Select the books that have not been rated by the user
-        unrated_books = user_ratings[user_ratings == 0].index
 
-        # Compute the correlation between the user's ratings and the ratings of all other users
-        corr = self.corr_matrix.corrwith(user_ratings)
 
-        # Select the 10 users with the highest correlation
-        top_10 = corr[corr > 0].sort_values(ascending=False).iloc[1:11]
 
-        # Compute the mean rating for each of the 10 users
-        top_10_mean_ratings = self.corr_matrix.loc[top_10.index].mean()
-
-        # Select the books that have not been rated by the user and that have been rated by the 10 users
-        # with the highest correlation
-        top_10_unrated_books = top_10_mean_ratings[unrated_books]
-
-        # Select the 10 books with the highest mean rating
-        top_10_unrated_books = top_10_unrated_books.sort_values(ascending=False).iloc[:10]
-        return self.get_result(top_10_unrated_books)
