@@ -1,21 +1,18 @@
--e git+https://github.com/savchart/book_rec_flask.git@dd922883ac43690e4302e96b0005bd369c9a025c#egg=book_app
+-e git+https://github.com/savchart/book_rec_flask.git@94511008fb38014bb27e1f8aaad222e2a456e114#egg=book_app
 click==8.1.3
-colorama==0.4.6
 Flask==2.2.2
 Flask-SQLAlchemy==3.0.3
 greenlet==2.0.2
-h11==0.14.0
-importlib-metadata==6.0.0
+gunicorn==20.1.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.2
-numpy==1.24.1
+numpy==1.24.2
 pandas==1.5.3
 python-dateutil==2.8.2
+python-dotenv==0.21.1
 pytz==2022.7.1
 six==1.16.0
-SQLAlchemy==2.0.1
-typing_extensions==4.4.0
-uvicorn==0.20.0
-Werkzeug==2.2.2
-zipp==3.12.0
+SQLAlchemy==2.0.4
+typing_extensions==4.5.0
+Werkzeug==2.2.3

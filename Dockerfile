@@ -26,5 +26,5 @@ RUN python scripts/create_db.py
 # Check if the db file is present in the root folder
 RUN ls | grep -E "app.db"
 
-#run uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+#run guvicorn
+CMD ["gunicorn", "app:app", "-b", "localhost:5000"]
